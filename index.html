@@ -1,12 +1,36 @@
-<script src="img.js"></script>
-<script>
-    window.onload = function () { // можно также использовать window.addEventListener('load', (event) => {
-        image = document.createElement('img')
-        image.src = 'img/01/01.png'
-        document.querySelector('body').appendChild(image)
-        image = document.createElement('img')
-        image.src = 'img/02/01.png'
-        document.querySelector('body').appendChild(image)
-    };
+<!doctype html>
+<html lang="ru">
 
-</script>
+<head>
+    <meta charset="utf-8" />
+    <title></title>
+    <style type="text/css">
+        .testImg { 
+         width: 600px; /* Размер шрифта */
+
+        }
+       </style>
+    <script>
+        // window.onload = function () { // можно также использовать window.addEventListener('load', (event) => {
+        //     image = document.createElement('img')
+        //     image.src = 'img/01/01.png'
+        //     document.querySelector('body').appendChild(image)
+        //     image = document.createElement('img')
+        //     image.src = 'img/02/01.png'
+        //     document.querySelector('body').appendChild(image)
+        // };
+
+    </script>
+</head>
+
+<body>
+    <img id="im0" class="testImg" src="img/02/01.png" alt="">
+    <input id="im0_but" type="button" value="Тык">
+    <img id="im1" class="testImg" src="img/02/01.png" alt="">
+    <input id="im1_but" type="button" value="Тык">
+    <img id="im2" class="testImg" src="img/02/01.png" alt="">
+    <input id="im2_but" type="button" value="Тык">
+    <input id="nextStep" type="button" value="Дальше">
+</body>
+
+</html>
