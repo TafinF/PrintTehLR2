@@ -5,31 +5,55 @@
     <meta charset="utf-8" />
     <title></title>
     <style type="text/css">
-        .testImg { 
-         width: 600px; /* Размер шрифта */
-
+        .testImg,
+        .plashka {
+            width: 600px;
         }
-       </style>
-    <script>
-        // window.onload = function () { // можно также использовать window.addEventListener('load', (event) => {
-        //     image = document.createElement('img')
-        //     image.src = 'img/01/01.png'
-        //     document.querySelector('body').appendChild(image)
-        //     image = document.createElement('img')
-        //     image.src = 'img/02/01.png'
-        //     document.querySelector('body').appendChild(image)
-        // };
 
+        div {
+            position: relative;
+        }
+
+        .plashka {
+            position: absolute;
+            visibility: hidden;
+        }
+    </style>
+    <script>
+        function img_mouseover() {
+            elemId = document.getElementById(this.id + "p")
+            elemId.style.visibility = "visible";
+            elemId.addEventListener("mouseout", img_mouseout, { once: true });
+            console.log("ddd")
+        }
+
+        function img_mouseout() {
+            this.style.visibility = "hidden";
+            console.log("aaa")
+        }
+
+        window.onload = function () {
+            let elems = document.getElementsByClassName('testImg');
+            for (var i = 0; i < elems.length; i++) {
+                elems[i].addEventListener("mouseover", img_mouseover);
+            }
+        };
     </script>
 </head>
 
 <body>
-    <img id="im0" class="testImg" src="img/02/01.png" alt="">
-    <input id="im0_but" type="button" value="Тык">
-    <img id="im1" class="testImg" src="img/02/01.png" alt="">
-    <input id="im1_but" type="button" value="Тык">
-    <img id="im2" class="testImg" src="img/02/01.png" alt="">
-    <input id="im2_but" type="button" value="Тык">
+    <div>
+        <img src="img/Plashka.png " class="plashka" id="im0p" />
+        <img src="img/02/01.png" class="testImg" id="im0" />
+    </div>
+    <div>
+        <img src="img/Plashka.png " class="plashka" id="im1p" />
+        <img src="img/02/02.png" class="testImg" id="im1" />
+    </div>
+    <div>
+        <img src="img/Plashka.png " class="plashka" id="im2p" />
+        <img src="img/02/03.png" class="testImg" id="im2" />
+    </div>
     <input id="nextStep" type="button" value="Дальше">
 </body>
 
