@@ -6,12 +6,14 @@
     <title></title>
     <style type="text/css">
         .testImg,
-        .plashka {
+        .plashka,
+        .div {
             width: 600px;
         }
 
         div {
-            position: relative;
+            /* position: relative; */
+            width: 600px;
         }
 
         .plashka {
@@ -24,12 +26,19 @@
             elemId = document.getElementById(this.id + "p")
             elemId.style.visibility = "visible";
             elemId.addEventListener("mouseout", img_mouseout, { once: true });
-            console.log("ddd")
+            elemId.addEventListener("click", img_click, { once: true });
+            console.log("mouseover "+this.id)
         }
 
         function img_mouseout() {
             this.style.visibility = "hidden";
-            console.log("aaa")
+            console.log("mouseout "+this.id)
+        }
+
+        function img_click() {
+            this.removeEventListener("mouseout", img_mouseout, { once: true });
+            // this.style.visibility = "hidden";
+            console.log("click "+this.id)
         }
 
         window.onload = function () {
