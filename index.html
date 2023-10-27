@@ -22,6 +22,7 @@
         }
     </style>
     <script>
+        STEP = 0
         function img_mouseover() {
             elemId = document.getElementById(this.id + "p")
             elemId.style.visibility = "visible";
@@ -47,6 +48,22 @@
                 elems[i].addEventListener("mouseover", img_mouseover);
             }
         };
+
+        function next_click() {
+            let ar_ls = ['-50','-45','-40','-35','-30','-25','-20','-15','-10','-5','+5','+10','+15','+20','+25','+30','+35','+40','+45','+50']
+            let ar_h = ['-10','-9','-8','-7','-6','-5','-4','-3','-2','-1','+1','+2','+3','+4','+5','+6','+7','+8','+9','+10']
+            let elems = document.getElementsByClassName('testImg');
+            fol_name = "02" // группа
+            img_name = "" // имя изображения и папки с ними
+            type_shift = "l"
+            shift_val = ar_ls[STEP]
+            for (var i = 0; i < elems.length; i++) {
+                img_name = "0"+(i+1)
+                elems[i].src = `img/${fol_name}/${img_name}/${img_name}_${type_shift}${shift_val}.png`
+            }
+            console.log("222")
+            STEP = STEP+1
+        }
     </script>
 </head>
 
@@ -63,7 +80,7 @@
         <img src="img/Plashka.png " class="plashka" id="im2p" />
         <img src="img/02/03.png" class="testImg" id="im2" />
     </div>
-    <input id="nextStep" type="button" value="Дальше">
+    <input id="nextStep" type="button" value="Дальше" onclick="next_click()">
 </body>
 
 </html>
