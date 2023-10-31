@@ -20,29 +20,31 @@
 
         .plashka {
             position: absolute;
-            visibility: hidden;
+            /* visibility: hidden; */
         }
-
     </style>
     <script>
-        STEP = 0
+        POL = NaN
+        VOZRAST = NaN
+        DATA_LIST = []
+
         function img_mouseover() {
             elemId = document.getElementById(this.id + "p")
             elemId.style.visibility = "visible";
             elemId.addEventListener("mouseout", img_mouseout, { once: true });
             elemId.addEventListener("click", img_click, { once: true });
-            console.log("mouseover "+this.id)
+            console.log("mouseover " + this.id)
         }
 
         function img_mouseout() {
             this.style.visibility = "hidden";
-            console.log("mouseout "+this.id)
+            console.log("mouseout " + this.id)
         }
 
         function img_click() {
             this.removeEventListener("mouseout", img_mouseout, { once: true });
             // this.style.visibility = "hidden";
-            console.log("click "+this.id)
+            console.log("click " + this.id)
         }
 
         window.onload = function () {
@@ -51,40 +53,170 @@
                 elems[i].addEventListener("mouseover", img_mouseover);
             }
         };
+        class IndexGen {
 
-        function next_click() {
-            let ar_ls = ['-50','-45','-40','-35','-30','-25','-20','-15','-10','-5','+5','+10','+15','+20','+25','+30','+35','+40','+45','+50']
-            let ar_h = ['-10','-9','-8','-7','-6','-5','-4','-3','-2','-1','+1','+2','+3','+4','+5','+6','+7','+8','+9','+10']
+            constructor() {
+                this.leftEnd = 0
+                this.rightEnd = 9
+                this.target = Math.round((this.leftEnd + this.rightEnd) / 2)
+            }
+
+            nextStep(ansver) {
+                console.log(this);
+                if (ansver) {
+                    this.leftEnd = this.target
+                }
+                else {
+                    if (this.target == this.rightEnd) {
+                        this.target -= 1
+                        return true
+                    }
+
+                    this.rightEnd = this.target
+                }
+                this.target = Math.round((this.leftEnd + this.rightEnd) / 2)
+
+                if (this.target == this.leftEnd) {
+                    return true
+                    this.target += 1
+                }
+
+                return (this.rightEnd - this.leftEnd) <= 0
+            }
+
+        }
+        class ImageV {
+            // static  ar_ls_n = ['-50', '-45', '-40', '-35', '-30', '-25', '-20', '-15', '-10', '-5']
+            static ar_ls_n = ['-5', '-10', '-15', '-20', '-25', '-30', '-35', '-40', '-45', '-50']
+            static ar_ls_p = ['+5', '+10', '+15', '+20', '+25', '+30', '+35', '+40', '+45', '+50']
+            // static ar_h_n = ['-10', '-9', '-8', '-7', '-6', '-5', '-4', '-3', '-2', '-1']
+            static ar_h_n = ['-1', '-2', '-3', '-4', '-5', '-6', '-7', '-8', '-9', '-10']
+            static ar_h_p = ['+1', '+2', '+3', '+4', '+5', '+6', '+7', '+8', '+9', '+10']
+            static varShift = ['l', 's', 'h']
+
+            constructor() {
+                this.indexShift = 0
+                this.direcyion = true
+
+            }
+
+            nextStep() {
+                if (this.direcyion) {
+                    this.direcyion = false
+                } else {
+                    this.direcyion = true
+                    this.indexShift += 1
+                }
+            }
+            getShift(ind) {
+                let valArr = NaN
+                if (this.direcyion) {
+                    switch (this.indexShift) {
+                        case 0:
+                            valArr = ImageV.ar_ls_p
+                            break;
+                        case 1:
+                            valArr = ImageV.ar_ls_p
+                            break;
+                        case 2:
+                            valArr = ImageV.ar_h_p
+                            break;
+                    }
+                } else {
+                    switch (this.indexShift) {
+                        case 0:
+                            valArr = ImageV.ar_ls_n
+                            break;
+                        case 1:
+                            valArr = ImageV.ar_ls_n
+                            break;
+                        case 2:
+                            valArr = ImageV.ar_h_n
+                            break;
+                    }
+                }
+                return `${ImageV.varShift[this.indexShift]}${valArr[ind]}`
+            }
+
+        }
+        let Inger = new IndexGen()
+        let Shifter = new ImageV()
+
+        function next_click(is_img_true) {
             let elems = document.getElementsByClassName('testImg');
             fol_name = "02" // группа
-            img_name = "" // имя изображения и папки с ними
-            type_shift = "l"
-            shift_val = ar_ls[STEP]
-            for (var i = 0; i < elems.length; i++) {
-                img_name = "0"+(i+1)
-                elems[i].src = `img/${fol_name}/${img_name}/${img_name}_${type_shift}${shift_val}.png`
+            // img_name = "" // имя изображения и папки с ними
+            // type_shift = varShift[indexShift]
+            let oldind = Inger.target
+            if (Inger.nextStep(is_img_true)) {
+                console.log("нашли")
+                DATA_LIST.push(oldind)
+                Inger = new IndexGen()
+                Shifter.nextStep()
+                console.log(Shifter.indexShift);
+                if (Shifter.indexShift==3) {
+                    showSps()
+                    return                
+                }
             }
-            console.log("222")
-            STEP = STEP+1
+            // shift_val = valArr[Inger.target - 1]
+            shift = Shifter.getShift(Inger.target)
+            console.log(shift);
+            for (var i = 0; i < elems.length; i++) {
+                let imgPlashka = document.getElementById(`im${i}p`);
+                if (imgPlashka.style.visibility == "hidden") {
+                    let img_name = "0" + (i + 1)
+                    // elems[i].src = `img/${fol_name}/${img_name}/${img_name}_${type_shift}${shift_val}.png`
+                    elems[i].src = `img/${fol_name}/${img_name}/${img_name}_${shift}.png`
+                }
+            }
+            // STEP = STEP + 1
+        }
+        function startTest() {
+            POL = document.querySelector('input[name="pol"]:checked').value
+        VOZRAST = document.getElementById(`VOZRAST`).value
+        console.log(POL);
+        console.log(VOZRAST);
+            document.getElementById(`name`).remove()
+            document.getElementById(`test`).style.visibility = "visible"
+        }
+        function showSps() {
+            document.getElementById(`test`).remove()
+            document.getElementById(`sps`).style.visibility = "visible" 
+            document.getElementById(`sps`).innerHTML = `<p>Пол: ${POL}</p><p>Возраст: ${VOZRAST}</p><p>Ответы: ${DATA_LIST}</p>`
         }
     </script>
 </head>
 
 <body>
-
-    <div>
-        <img src="img/Plashka.png " class="plashka" id="im0p" />
-        <img src="img/02/01.png" class="testImg" id="im0" />
+    <div id="name">
+        <p><b>Ваш возраст:</b><br>
+            <input id="VOZRAST" type="text" size="40">
+        </p>
+        <p><b>Ваш пол:</b><Br>
+            <input type="radio" name="pol" value="m"> Мужской<Br>
+            <input type="radio" name="pol" value="w"> Женский<Br>
+        </p>
+        <p>Описание задачи.................<br>
+        <input type="button" value="Далее" onclick="startTest()">
     </div>
-    <div>
-        <img src="img/Plashka.png " class="plashka" id="im1p" />
-        <img src="img/02/02.png" class="testImg" id="im1" />
+    <div id="test" style="visibility: hidden;">
+        <div>
+            <img src="img/Plashka.png " class="plashka" id="im0p" style="visibility: hidden;" />
+            <img src="img/02/01.png" class="testImg" id="im0" />
+        </div>
+        <div>
+            <img src="img/Plashka.png " class="plashka" id="im1p" style="visibility: hidden;" />
+            <img src="img/02/02.png" class="testImg" id="im1" />
+        </div>
+        <div>
+            <img src="img/Plashka.png " class="plashka" id="im2p" style="visibility: hidden;" />
+            <img src="img/02/03.png" class="testImg" id="im2" />
+        </div>
+        <input id="nextStep" type="button" value="Дальше" onclick="next_click(true)">
+        <input id="nextStep_neg" type="button" value="Не подходят все" onclick="next_click(false)">
     </div>
-    <div>
-        <img src="img/Plashka.png " class="plashka" id="im2p" />
-        <img src="img/02/03.png" class="testImg" id="im2" />
-    </div>
-    <input id="nextStep" type="button" value="Дальше" onclick="next_click()">
+    <div id="sps" style="visibility: hidden;">Cпасибо за участие</div>
 </body>
 
 </html>
